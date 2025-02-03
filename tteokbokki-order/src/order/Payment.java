@@ -28,10 +28,10 @@ public class Payment {
 
     public void pay() {
         boolean payAbility = false;
-        askForPayment();
+        boolean opinion = askForPayment();
 
         while(!payAbility) {
-            if (user.getCardBalance() >= cart.getTotalPrice() && askForPayment()) {
+            if (user.getCardBalance() >= cart.getTotalPrice() && opinion) {
                 user.updateCardBalance(user.getCardBalance() - cart.getTotalPrice());
                 payAbility = true;
             }
@@ -42,9 +42,7 @@ public class Payment {
 
     public void showPayResult(boolean result) {
         if (result) {
-            for (Menu menu : cart.getCartItems()) {
-                System.out.println(menu.getName());
-            }
+            System.out.println("\n결제가 완료되었습니다.");
             System.out.println("결제 금액은 " + cart.getTotalPrice() + "입니다.");
             System.out.println("현재 남은 잔액은 " + user.getCardBalance() + "입니다.\n");
         } else {

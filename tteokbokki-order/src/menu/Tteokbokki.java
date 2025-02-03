@@ -13,7 +13,7 @@ public class Tteokbokki extends Menu {
         SpicyLevelFactory slf = new SpicyLevelFactory(2);
 
         Scanner sc = new Scanner(System.in);
-        System.out.println("매운 맛 정도를 선택하세요. (1: 착한맛, 2: 오리지널) : ");
+        System.out.println("\n매운 맛 정도를 선택하세요. (1: 착한맛, 2: 오리지널) : ");
         int spicyLevel = sc.nextInt();
         return slf.selectSpicyLevel(spicyLevel);
     }

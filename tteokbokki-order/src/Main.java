@@ -18,7 +18,7 @@ public class Main {
             System.out.println("\n새 주문을 시작합니다. 동의하십니까? (1: 예, 2: 아니오)");
             int input = ic.getValidChoiceInRange(2, 1);
             if (input == 2) {
-                System.out.println("어플을 종료합니다.");
+                System.out.println("\n어플을 종료합니다.");
                 break;
             }
 

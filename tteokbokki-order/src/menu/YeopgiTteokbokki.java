@@ -17,7 +17,7 @@ public class YeopgiTteokbokki extends Tteokbokki {
         SpicyLevelFactory slf = new SpicyLevelFactory(1);
 
         Scanner sc = new Scanner(System.in);
-        System.out.println("매운 맛 정도를 선택하세요. (1: 착한맛, 2: 초보맛, 3: 덜매운맛, 4: 오리지널, 5: 매운맛) : ");
+        System.out.println("\n매운 맛 정도를 선택하세요. (1: 착한맛, 2: 초보맛, 3: 덜매운맛, 4: 오리지널, 5: 매운맛) : ");
         int spicyLevel = sc.nextInt();
         return slf.selectSpicyLevel(spicyLevel);
     }

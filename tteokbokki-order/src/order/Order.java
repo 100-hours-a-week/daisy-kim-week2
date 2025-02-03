@@ -29,7 +29,7 @@ public class Order {
             selectItem();
             int choice = 0;
 
-            System.out.print("1: 장바구니에 담기, 2: 메뉴 다시 담기 : ");
+            System.out.print("\n1: 장바구니에 담기, 2: 메뉴 다시 담기 : ");
             choice = ic.getValidChoiceInRange(2,1);
             if(choice == 2) {
                 continue;
@@ -92,7 +92,7 @@ public class Order {
         int tbkCnt = ttf.getTteokbokkiCount();
         int menuCnt = tbkCnt + mf.getMenuCount();
 
-        System.out.println("주문할 메뉴를 선택해 주세요.\n[떡볶이]");
+        System.out.println("\n주문할 메뉴를 선택해 주세요.\n[떡볶이]");
         for(int i = 1; i <= tbkCnt; i++) {
             System.out.println(i + ": " + ttf.getTteokbokki(i).getName() + " +" + ttf.getTteokbokki(i).getPrice() + "원");
         }
@@ -103,7 +103,7 @@ public class Order {
     }
 
     public void showToppings() {
-        System.out.println("원하는 토핑을 골라주세요.(0~3개)");
+        System.out.println("\n원하는 토핑을 골라주세요.(0~3개)");
         int toppingCnt = toppingFactory.getToppingCount();
 
         for (int j = 0; j < toppingCnt; j++) {
