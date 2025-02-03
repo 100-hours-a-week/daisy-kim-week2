@@ -8,6 +8,7 @@ public class SpicyLevelFactory {
 
     public SpicyLevelFactory(int type) {
         spicyLevel = new HashMap<Integer, String>();
+
         if (type == 1) {
             spicyLevel.put(1, "착한맛");
             spicyLevel.put(2, "착한맛");

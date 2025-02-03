@@ -4,65 +4,69 @@ import menu.Menu;
 import menu.Tteokbokki;
 import menu.topping.Topping;
 import user.User;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import validation.InputCheck;
 
 public class Order {
     private final User user;
-    private final List<Menu> cart = new ArrayList<>();
-
     private int price = 0;
     private String name = "";
-    private int totalPrice = 0;
+
+    private static final TteokbokkiFactory ttf = new TteokbokkiFactory();
+    private static final SideMenuFactory mf = new SideMenuFactory();
+    private static final ToppingFactory toppingFactory = new ToppingFactory();
+
+    private final InputCheck ic = new InputCheck();
 
     public Order(User user) {
         this.user = user;
     }
 
-    Scanner sc = new Scanner(System.in);
-
     //주문 로직(반복 회로)
-    public void order() {
-       while(true) {
-           selectItem();
-           cart.add(new Menu(name, price));
-           totalPrice += price;
+    public Cart order() {
+        Cart cart = new Cart(user);
 
-           System.out.print("더 주문하시겠습니까? (1: 예, 2: 아니오) : ");
-           int choice = sc.nextInt();
-           if(choice == 2) {
-               break;
-           }
-           price = 0;
-           name = "";
-       }
-       Payment payment = new Payment(user);
-       payment.askForPayment(cart, totalPrice);
+        while(true) {
+            selectItem();
+            int choice = 0;
+
+            System.out.print("1: 장바구니에 담기, 2: 메뉴 다시 담기 : ");
+            choice = ic.getValidChoiceInRange(2,1);
+            if(choice == 2) {
+                continue;
+            }
+            cart.addMenu(new Menu(name, price));
+
+            System.out.print("더 주문하시겠습니까? (1: 예, 2: 아니오) : ");
+            choice = ic.getValidChoiceInRange(2, 1);
+            if(choice == 2) {
+                break;
+            }
+
+            price = 0;
+            name = "";
+        }
+        return cart;
     }
 
-    //한 개 주문하기
     public void selectItem() {
-        System.out.println("주문할 메뉴를 선택해 주세요.\n" +
-                "[떡볶이]\n 1: 엽기 메뉴, 2: 로제 메뉴, 3: 마라떡볶이, 4: 마라로제 떡볶이\n" +
-                "[사이드]\n 5: 단무지, 6: 주시쿨");
+        showMenus();
+        int tbkCnt = ttf.getTteokbokkiCount();
+        int menuCnt = tbkCnt + mf.getMenuCount();
 
-        Menu menu = null;
-        Tteokbokki tteokbokki = null;
-
-        int choice = sc.nextInt();
-        if (choice <= 4) {
-            TteokbokkiFactory ttf = new TteokbokkiFactory();
-            tteokbokki = ttf.getTteokbokki(choice);
+        int choice = ic.getValidChoiceInRange(menuCnt, 1);
+        while(true) {
+            if (choice != 0) break;
+            System.out.println("잘못된 입력입니다. 선택지에 있는 번호를 입력해 주세요.");
+        }
+        if (choice <= tbkCnt) {
+            Tteokbokki tteokbokki = ttf.getTteokbokki(choice);
             String spicyLevelName = tteokbokki.selectSpicyLevel();
             name = tteokbokki.getName() + " " + spicyLevelName;
             price = tteokbokki.getPrice();
 
             selectTopping();
         } else {
-            MenuFactory mf = new MenuFactory();
-            menu = mf.getMenu(choice);
+            Menu menu = mf.getMenu(choice);
             name = menu.getName();
             price = menu.getPrice();
         }
@@ -70,22 +74,41 @@ public class Order {
 
     //토핑 고르기
     public void selectTopping() {
-        ToppingFactory toppingFactory = new ToppingFactory();
+        int maxToppingCntAbility = 3;
+        int toppingCnt = toppingFactory.getToppingCount();
 
-        Scanner sc = new Scanner(System.in);
-
-        for (int i = 0; i < 3; i++) {
-            System.out.println("원하는 토핑을 골라주세요.(0~3개) \n(1: 떡 추가, 2: 오뎅 추가, 3: 우삼겹, 4: 통유부(4개), 5: 퐁당치즈만두(7개), 6: 중국당면, 7: 분모자, 0: 토핑 선택 안 함): ");
-            int toppingChoice = sc.nextInt();
-            if (toppingChoice == 0)
-                break;
+        for (int i = 0; i < maxToppingCntAbility; i++) {
+            showToppings();
+            int toppingChoice = ic.getValidChoiceInRange(toppingCnt, 0);
+            if (toppingChoice == 0) break;
 
             Topping topping = toppingFactory.getTopping(toppingChoice);
-            List<Topping> toppingList = new ArrayList<> ();
-            toppingList.add(topping);
-
-            name += " " + topping.getName() + "추가";
+            name += " " + topping.getName();
             price += topping.getPrice();
+        }
+    }
+
+    public void showMenus() {
+        int tbkCnt = ttf.getTteokbokkiCount();
+        int menuCnt = tbkCnt + mf.getMenuCount();
+
+        System.out.println("주문할 메뉴를 선택해 주세요.\n[떡볶이]");
+        for(int i = 1; i <= tbkCnt; i++) {
+            System.out.println(i + ": " + ttf.getTteokbokki(i).getName() + " +" + ttf.getTteokbokki(i).getPrice() + "원");
+        }
+        System.out.println("[사이드]");
+        for(int i = tbkCnt + 1; i <= menuCnt; i++) {
+            System.out.println(i + ": " + mf.getMenu(i).getName() + " +" + mf.getMenu(i).getPrice() + "원");
+        }
+    }
+
+    public void showToppings() {
+        System.out.println("원하는 토핑을 골라주세요.(0~3개)");
+        int toppingCnt = toppingFactory.getToppingCount();
+
+        for (int j = 0; j < toppingCnt; j++) {
+            System.out.println(j + ": " + toppingFactory.getTopping(j).getName() +
+                    " +" + toppingFactory.getTopping(j).getPrice() + "원");
         }
     }
 }

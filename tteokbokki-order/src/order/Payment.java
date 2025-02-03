@@ -2,54 +2,66 @@ package order;
 
 import menu.Menu;
 import user.User;
-
-import java.util.List;
-import java.util.Scanner;
+import validation.InputCheck;
 
 public class Payment {
-    User user;
-    Scanner sc = new Scanner(System.in);
+    private final User user;
+    private final Cart cart;
+    InputCheck ic = new InputCheck();
 
-    public Payment(User user) {
+    public Payment(User user, Cart cart) {
         this.user = user;
+        this.cart = cart;
     }
 
-    //결제 의사 물어보기
-    public void askForPayment(List<Menu> cart, int totalPrice){
-        for (Menu menu : cart) {
-            System.out.println(menu.getName());
-        }
-        System.out.println("총 가격은 " + totalPrice + "입니다.");
+    public boolean askForPayment(){
+        boolean isPositive = false;
+        cart.printCart();
         System.out.println("결제하시겠습니까?(1: 예, 2: 아니오) : ");
-        int choice = sc.nextInt();
 
+        int choice = ic.getValidChoiceInRange(2,1);
         if(choice == 1) {
-            payResult(cart, totalPrice);
-        } else {
-            System.out.println("결제를 취소하였습니다.");
+            isPositive = true;
+        }
+        return isPositive;
+    }
+
+    public void pay() {
+        boolean payAbility = false;
+        askForPayment();
+
+        while(!payAbility) {
+            if (user.getCardBalance() >= cart.getTotalPrice() && askForPayment()) {
+                user.updateCardBalance(user.getCardBalance() - cart.getTotalPrice());
+                payAbility = true;
+            }
+            showPayResult(payAbility);
+            payAbility = retryPayment(payAbility);
         }
     }
 
-    public void payResult(List<Menu> cart, int totalPrice) {
-        boolean result = pay(totalPrice);
+    public void showPayResult(boolean result) {
         if (result) {
-            for (Menu menu : cart) {
+            for (Menu menu : cart.getCartItems()) {
                 System.out.println(menu.getName());
             }
-            System.out.println("결제 금액은 " + totalPrice + "입니다.");
+            System.out.println("결제 금액은 " + cart.getTotalPrice() + "입니다.");
             System.out.println("현재 남은 잔액은 " + user.getCardBalance() + "입니다.\n");
         } else {
-            System.out.println("카드에 잔액이 부족합니다." + "\n");
+            System.out.println("\n카드에 잔액이 부족합니다.");
         }
     }
-
-    //실제 결제
-    public boolean pay(int payingPrice) {
-        boolean result = false;
-        if (user.getCardBalance() >= payingPrice) {
-            user.updateCardBalance(user.getCardBalance() - payingPrice);
-            result = true;
+    public boolean retryPayment(boolean payAbility) {
+        if (payAbility) return true;
+        System.out.print("카드 잔액을 채우시겠습니까? (1: 예, 2: 아니오) : ");
+        int choice = ic.getValidChoiceInRange(2,1);
+        if (choice == 2) {
+            System.out.println("결제에 실패하여 처음으로 돌아갑니다.");
+            return true;
         }
-        return result;
+        System.out.print("얼마를 채우시겠습니까? : ");
+        int addingPrice = ic.getValidCardBalance();
+        user.updateCardBalance(user.getCardBalance() + addingPrice);
+        return false;
     }
 }
