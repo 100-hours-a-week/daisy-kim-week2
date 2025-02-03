@@ -19,4 +19,7 @@ public class TteokbokkiFactory {
     public Tteokbokki getTteokbokki(int id) {
         return tteokbokkiMap.get(id);
     }
+    public int getTteokbokkiCount() {
+        return tteokbokkiMap.size();
+    }
 }

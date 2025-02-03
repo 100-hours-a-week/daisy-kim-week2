@@ -12,6 +12,7 @@ public class YeopgiTteokbokki extends Tteokbokki {
         super(name, price);
     }
 
+    @Override
     public String selectSpicyLevel() {
         SpicyLevelFactory slf = new SpicyLevelFactory(1);
 
@@ -20,6 +21,4 @@ public class YeopgiTteokbokki extends Tteokbokki {
         int spicyLevel = sc.nextInt();
         return slf.selectSpicyLevel(spicyLevel);
     }
-    //분모자로 할 시 3천 원 추가
-
 }

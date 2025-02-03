@@ -10,6 +10,7 @@ public class ToppingFactory {
 
     public ToppingFactory() {
         toppingMap = new HashMap<>();
+        toppingMap.put(0, new NoTopping());
         toppingMap.put(1, new TteokTopping());
         toppingMap.put(2, new OdangTopping());
         toppingMap.put(3, new MeatTopping());
@@ -22,5 +23,9 @@ public class ToppingFactory {
     //떡볶이 대응시켜서 반환하기
     public Topping getTopping(int toppingChoice) {
         return toppingMap.get(toppingChoice);
+    }
+
+    public int getToppingCount() {
+        return toppingMap.size();
     }
 }

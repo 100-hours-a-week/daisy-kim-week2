@@ -1,5 +1,8 @@
 package user;
 
+import util.InputScanner;
+import validation.InputCheck;
+
 import java.util.Scanner;
 
 public class User {
@@ -9,54 +12,99 @@ public class User {
     private int cardBalance;
 
     private static User user;
-    //user 생성자
-    private User(String name, String phoneNumber, int cardBalance) {
+    private static final Scanner sc = InputScanner.getScanner();
+    private static final InputCheck ic = new InputCheck();
+
+    private User(String name, String phoneNumber, int cardBalance, String address) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.cardBalance = cardBalance;
+        this.address = address;
     }
 
-    //user 객체 반환 함수
-    public static User getInstance(String name, String phoneNumber, int cardBalance) {
+    public static User getInstance(String name, String phoneNumber, int cardBalance, String address) {
         if (user == null) {
-            user = new User(name, phoneNumber, cardBalance);
+            user = new User(name, phoneNumber, cardBalance, address);
         }
         return user;
     }
 
-    //잔액 반환 함수
     public int getCardBalance() {
         return cardBalance;
     }
 
-    //결제 시 잔액 차감 함수 -> 아마 pay 클래스로 가야할지도?
     public void updateCardBalance(int cardBalance) {
         this.cardBalance = cardBalance;
     }
 
-    //주소 설정 함수
-    public void setAddress() {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("음식을 배달시킬 주소를 알려주세요. : ");
-        this.address = sc.nextLine();
+    public String getName() {
+        return name;
     }
 
-    //메인 함수로 옮길 수도?
+    private static String setName() {
+        String name = "";
+        while(true) {
+            System.out.print("사용자의 이름을 입력하세요. : ");
+            name = sc.nextLine();
+            boolean result = ic.isValidName(name);
+            if (result) {
+                break;
+            }
+            System.out.println("잘못된 입력입니다. 영문 또는 한국어 이름을 입력해 주세요.");
+        }
+        return name;
+    }
+
+    private static String setPhoneNumber() {
+        String phoneNumber = "";
+        while(true) {
+            System.out.print("사용자의 전화번호를 입력하세요.(ex.010-0000-0000) : ");
+            phoneNumber = sc.nextLine();
+            boolean result = ic.isValidPhoneNumber(phoneNumber);
+            if (result) {
+                break;
+            }
+            System.out.println("잘못된 전화번호 입력입니다. 예시에 맞는 형식으로 입력해 주세요.");
+        }
+        return phoneNumber;
+    }
+
+    private static int setIntContent() {
+        int intContent = 0;
+        while(true) {
+            System.out.print("카드에 남아있는 잔액을 알려주세요. : ");
+            intContent = ic.getValidCardBalance();
+            if (intContent >= 0) {
+                break;
+            }
+            System.out.println("잔액이 없습니다. 잔액을 채우고 오세요.");
+            sc.nextLine();
+        }
+        return intContent;
+    }
+
+    private static String setAddress() {
+        String address = "";
+        while(true) {
+            System.out.print("음식을 배달시킬 주소를 알려주세요. : ");
+            address = sc.nextLine();
+            boolean result = ic.isValidAddress(address);
+            if (result) {
+                break;
+            }
+            System.out.println("잘못된 입력입니다. 영문 또는 한국어로 입력해 주세요.");
+        }
+        return address;
+    }
+
     public static User setUserInfo() {
-        Scanner sc = new Scanner(System.in);
+        String userName = setName();
+        String phoneNumber = setPhoneNumber();
+        int cardBalance = setIntContent();
+        sc.nextLine();
+        String address = setAddress();
 
-        System.out.println("사용자의 이름을 입력하세요.: ");
-        String userName = sc.nextLine();
-
-        System.out.println("사용자의 전화번호를 입력하세요.(ex.010-0000-0000) : ");
-        String phoneNumber = sc.nextLine();
-
-        System.out.println("카드에 남아있는 잔액을 알려주세요. : ");
-        int cardBalance = sc.nextInt();
-
-        User user = User.getInstance(userName, phoneNumber, cardBalance);
-        user.setAddress();
+        User user = User.getInstance(userName, phoneNumber, cardBalance, address);
 
         return user;
     }
