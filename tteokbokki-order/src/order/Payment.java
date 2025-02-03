@@ -30,13 +30,16 @@ public class Payment {
         boolean payAbility = false;
         boolean opinion = askForPayment();
 
-        while(!payAbility) {
-            if (user.getCardBalance() >= cart.getTotalPrice() && opinion) {
+        while(opinion) {
+            if (user.getCardBalance() >= cart.getTotalPrice()) {
                 user.updateCardBalance(user.getCardBalance() - cart.getTotalPrice());
                 payAbility = true;
             }
             showPayResult(payAbility);
-            payAbility = retryPayment(payAbility);
+            if(payAbility) {
+                break;
+            }
+            opinion = retryPayment();
         }
     }
 
@@ -49,17 +52,16 @@ public class Payment {
             System.out.println("\n카드에 잔액이 부족합니다.");
         }
     }
-    public boolean retryPayment(boolean payAbility) {
-        if (payAbility) return true;
+    public boolean retryPayment() {
         System.out.print("카드 잔액을 채우시겠습니까? (1: 예, 2: 아니오) : ");
         int choice = ic.getValidChoiceInRange(2,1);
         if (choice == 2) {
             System.out.println("결제에 실패하여 처음으로 돌아갑니다.");
-            return true;
+            return false;
         }
         System.out.print("얼마를 채우시겠습니까? : ");
         int addingPrice = ic.getValidCardBalance();
         user.updateCardBalance(user.getCardBalance() + addingPrice);
-        return false;
+        return true;
     }
 }
