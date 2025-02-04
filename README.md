@@ -52,7 +52,7 @@
 <br>
 
 ## 👀 실행 결과
-![Image](https://github.com/user-attachments/assets/516f4646-b16c-4045-82ce-2b5e614ec2fe)
+![Image](https://github.com/user-attachments/assets/54d3e93e-964b-4aa5-88ca-81a3201b490a)
 
 <br><br>
 
