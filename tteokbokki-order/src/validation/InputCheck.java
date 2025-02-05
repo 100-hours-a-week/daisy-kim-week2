@@ -5,7 +5,7 @@ import util.InputScanner;
 import java.util.Scanner;
 
 public class InputCheck{
-    private static final Scanner sc = InputScanner.getScanner();
+    private static final Scanner scanner = InputScanner.getScanner();
 
     public boolean isValidName(String name) {
         if (name == null || name.trim().isEmpty()) {
@@ -48,16 +48,16 @@ public class InputCheck{
         int choice = 0;
         while (true) {
             try{
-                choice = sc.nextInt();
+                choice = scanner.nextInt();
                 if(choice > rangeMax || choice < rangeMin) {
                     System.out.println("잘못된 입력입니다. 선택지에 있는 번호를 입력해 주세요.");
-                    sc.nextLine();
+                    scanner.nextLine();
                     continue;
                 }
                 break;
             } catch (Exception e){
                 System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");
-                sc.nextLine();
+                scanner.nextLine();
             }
         }
         return choice;
@@ -67,11 +67,11 @@ public class InputCheck{
         int balance = 0;
         while (true) {
             try{
-                balance = sc.nextInt();
+                balance = scanner.nextInt();
                 break;
             } catch (Exception e){
                 System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");
-                sc.nextLine();
+                scanner.nextLine();
             }
         }
         return balance;

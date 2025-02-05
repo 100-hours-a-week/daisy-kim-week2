@@ -12,8 +12,8 @@ public class User {
     private int cardBalance;
 
     private static User user;
-    private static final Scanner sc = InputScanner.getScanner();
-    private static final InputCheck ic = new InputCheck();
+    private static final Scanner scanner = InputScanner.getScanner();
+    private static final InputCheck inputCheck = new InputCheck();
 
     private User(String name, String phoneNumber, int cardBalance, String address) {
         this.name = name;
@@ -45,8 +45,8 @@ public class User {
         String name = "";
         while(true) {
             System.out.print("사용자의 이름을 입력하세요. : ");
-            name = sc.nextLine();
-            boolean result = ic.isValidName(name);
+            name = scanner.nextLine();
+            boolean result = inputCheck.isValidName(name);
             if (result) {
                 break;
             }
@@ -59,8 +59,8 @@ public class User {
         String phoneNumber = "";
         while(true) {
             System.out.print("사용자의 전화번호를 입력하세요.(ex.010-0000-0000) : ");
-            phoneNumber = sc.nextLine();
-            boolean result = ic.isValidPhoneNumber(phoneNumber);
+            phoneNumber = scanner.nextLine();
+            boolean result = inputCheck.isValidPhoneNumber(phoneNumber);
             if (result) {
                 break;
             }
@@ -73,12 +73,12 @@ public class User {
         int intContent = 0;
         while(true) {
             System.out.print("카드에 남아있는 잔액을 알려주세요. : ");
-            intContent = ic.getValidCardBalance();
+            intContent = inputCheck.getValidCardBalance();
             if (intContent >= 0) {
                 break;
             }
             System.out.println("잔액이 없습니다. 잔액을 채우고 오세요.");
-            sc.nextLine();
+            scanner.nextLine();
         }
         return intContent;
     }
@@ -87,8 +87,8 @@ public class User {
         String address = "";
         while(true) {
             System.out.print("음식을 배달시킬 주소를 알려주세요. : ");
-            address = sc.nextLine();
-            boolean result = ic.isValidAddress(address);
+            address = scanner.nextLine();
+            boolean result = inputCheck.isValidAddress(address);
             if (result) {
                 break;
             }
@@ -101,7 +101,7 @@ public class User {
         String userName = setName();
         String phoneNumber = setPhoneNumber();
         int cardBalance = setIntContent();
-        sc.nextLine();
+        scanner.nextLine();
         String address = setAddress();
 
         User user = User.getInstance(userName, phoneNumber, cardBalance, address);

@@ -24,10 +24,6 @@ public class Cart {
         return totalPrice;
     }
 
-    public List<Menu> getCartItems() {
-        return cartItems;
-    }
-
     public void printCart() {
         System.out.println("\n[" + user.getName() + "님의 장바구니]");
         for (Menu menu : cartItems) {

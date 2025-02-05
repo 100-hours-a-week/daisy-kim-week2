@@ -1,12 +1,13 @@
 package order;
 
+import menu.Menu;
 import menu.topping.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ToppingFactory {
-    private final Map<Integer, Topping> toppingMap;
+public class ToppingFactory extends Factory {
+    private final Map<Integer, Menu> toppingMap;
 
     public ToppingFactory() {
         toppingMap = new HashMap<>();
@@ -20,12 +21,11 @@ public class ToppingFactory {
         toppingMap.put(7, new BunmojaTopping());
     }
 
-    //떡볶이 대응시켜서 반환하기
-    public Topping getTopping(int toppingChoice) {
+    public Menu getMenuName(int toppingChoice) {
         return toppingMap.get(toppingChoice);
     }
 
-    public int getToppingCount() {
+    public int getTotalNumber() {
         return toppingMap.size();
     }
 }

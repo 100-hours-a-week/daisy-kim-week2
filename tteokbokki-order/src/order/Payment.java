@@ -1,13 +1,12 @@
 package order;
 
-import menu.Menu;
 import user.User;
 import validation.InputCheck;
 
 public class Payment {
     private final User user;
     private final Cart cart;
-    InputCheck ic = new InputCheck();
+    InputCheck inputCheck = new InputCheck();
 
     public Payment(User user, Cart cart) {
         this.user = user;
@@ -19,7 +18,7 @@ public class Payment {
         cart.printCart();
         System.out.println("결제하시겠습니까?(1: 예, 2: 아니오) : ");
 
-        int choice = ic.getValidChoiceInRange(2,1);
+        int choice = inputCheck.getValidChoiceInRange(2,1);
         if(choice == 1) {
             isPositive = true;
         }
@@ -54,13 +53,13 @@ public class Payment {
     }
     public boolean retryPayment() {
         System.out.print("카드 잔액을 채우시겠습니까? (1: 예, 2: 아니오) : ");
-        int choice = ic.getValidChoiceInRange(2,1);
+        int choice = inputCheck.getValidChoiceInRange(2,1);
         if (choice == 2) {
             System.out.println("결제에 실패하여 처음으로 돌아갑니다.");
             return false;
         }
         System.out.print("얼마를 채우시겠습니까? : ");
-        int addingPrice = ic.getValidCardBalance();
+        int addingPrice = inputCheck.getValidCardBalance();
         user.updateCardBalance(user.getCardBalance() + addingPrice);
         return true;
     }
