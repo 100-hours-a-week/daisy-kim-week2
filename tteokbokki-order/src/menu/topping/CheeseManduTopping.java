@@ -1,10 +1,10 @@
 package menu.topping;
 
 public class CheeseManduTopping extends Topping {
-    private static final String name = "퐁당치즈만두(7개) 추가";
-    private static final int price = 2000;
+    private static final String NAME = "퐁당치즈만두(7개) 추가";
+    private static final int PRICE = 2000;
 
     public CheeseManduTopping() {
-        super(name, price);
+        super(NAME, PRICE);
     }
 }

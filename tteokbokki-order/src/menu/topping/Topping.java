@@ -1,19 +1,9 @@
 package menu.topping;
 
-public class Topping {
-    private String name;
-    private int price;
+import menu.Menu;
 
+public class Topping extends Menu {
     public Topping(String name, int price) {
-        this.name = name;
-        this.price = price;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getPrice() {
-        return price;
+        super(name,price);
     }
 }
