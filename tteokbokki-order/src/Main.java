@@ -1,16 +1,17 @@
+import coupon.CouponManager;
 import order.Cart;
 import order.Order;
 import order.Payment;
 import user.User;
 import validation.InputCheck;
 
-//TIP 코드를 <b>실행</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나
-// 에디터 여백에 있는 <icon src="AllIcons.Actions.Execute"/> 아이콘을 클릭하세요.
 public class Main {
     public static void main(String[] args) {
 
         System.out.println("엽기 떡볶이에 오신 것을 환영합니다.");
         User user = User.setUserInfo();
+        CouponManager couponManager = new CouponManager(user);
+        couponManager.playCoupon();
         InputCheck ic = new InputCheck();
 
         while(true) {
