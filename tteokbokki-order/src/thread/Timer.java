@@ -1,14 +1,15 @@
-package timer;
+package thread;
 
 import coupon.Coupon;
 
 public class Timer extends Thread {
     private Coupon coupon;
     private static Timer timer;
-
     private Timer(Coupon coupon) {
         this.coupon = coupon;
     }
+
+    public boolean shouldWait = false;
 
     public static Timer getInstance(Coupon coupon) {
         if (timer == null) {
@@ -30,18 +31,32 @@ public class Timer extends Thread {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         int timeLeft = coupon.getTime();
 
         while(timeLeft > 0) {
-            System.out.println("\n쿠폰 사용 가능한 시간 " + timeLeft + "초 남았습니다.");
+            if (shouldWait) { //스레드 대기
+                try {
+                    timer.wait();
+                } catch (InterruptedException e) { //스레드 대기하기하는 거 중단
+                    System.out.println("쿠폰 사용 완료");
+                    break;
+                }
+                continue;
+            }
+
+            timeLeft--;
+            if (timeLeft % 10 == 0) {
+                System.out.println("===== 쿠폰 사용 가능한 시간 " + timeLeft + "초 남았습니다. =====");
+            }
+
             try {
-                Thread.sleep(10000); //10초
+                Thread.sleep(1000); //1초
             } catch (InterruptedException e) {
-                System.out.println("쿠폰을 사용하였습니다.");
+                System.out.println("더 이상 쿠폰을 사용하실 수 없습니다.");
                 break;
             }
-            timeLeft = timeLeft - 10;
+
         }
 
         if (timeLeft == 0)
