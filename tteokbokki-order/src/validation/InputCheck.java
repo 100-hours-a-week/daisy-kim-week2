@@ -18,6 +18,7 @@ public class InputCheck{
         }
         return true;
     }
+
     public boolean isValidPhoneNumber(String number) {
         if (number == null || number.trim().isEmpty() ||
                 number.replaceAll("[- ]", "").length() > 12
@@ -60,6 +61,8 @@ public class InputCheck{
                 scanner.nextLine();
             }
         }
+
+        scanner.nextLine();
         return choice;
     }
 
@@ -76,4 +79,6 @@ public class InputCheck{
         }
         return balance;
     }
+
+
 }

@@ -1,8 +1,7 @@
 package order;
 
 import coupon.Coupon;
-import coupon.CouponFactory;
-import timer.Timer;
+import thread.Timer;
 import user.User;
 import validation.InputCheck;
 
@@ -19,15 +18,17 @@ public class Payment {
         this.cart = cart;
     }
 
-    public boolean askForPayment(){
+    public boolean askForPayment() {
         boolean isPositive = false;
 
         cart.printCart();
         printCouponSale();
 
+        Timer.getInstance().shouldWait = true; //스레드 상호작용 부분 -> 타이머 중지
         System.out.println("\n결제하시겠습니까?(1: 예, 2: 아니오) : ");
-
         int choice = inputCheck.getValidChoiceInRange(2,1);
+        Timer.getInstance().shouldWait = false;
+
         if(choice == 1) {
             isPositive = true;
         }

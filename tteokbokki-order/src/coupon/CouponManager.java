@@ -1,6 +1,6 @@
 package coupon;
 
-import timer.Timer;
+import thread.Timer;
 import user.User;
 import validation.InputCheck;
 
@@ -26,11 +26,11 @@ public class CouponManager {
     public void drawCoupon() {
         CouponFactory couponFactory = new CouponFactory();
 
-        int couponCount = couponFactory.getCouponCount() + 1;
+        int couponCount = couponFactory.getCouponCount(); //쿠폰 개수 : 4개
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
 
-        couponId = random.nextInt(couponCount);
+        couponId = random.nextInt(couponCount) + 1; // 0 ~ 3 -> 1 ~ 4
         coupon =  couponFactory.getCoupon(couponId);
     }
 
