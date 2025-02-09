@@ -1,5 +1,8 @@
 package order;
 
+import coupon.Coupon;
+import coupon.CouponFactory;
+import timer.Timer;
 import user.User;
 import validation.InputCheck;
 
@@ -8,6 +11,9 @@ public class Payment {
     private final Cart cart;
     InputCheck inputCheck = new InputCheck();
 
+    private Timer timer = Timer.getInstance();
+    private Coupon coupon = timer.getCoupon();
+
     public Payment(User user, Cart cart) {
         this.user = user;
         this.cart = cart;
@@ -15,8 +21,11 @@ public class Payment {
 
     public boolean askForPayment(){
         boolean isPositive = false;
+
         cart.printCart();
-        System.out.println("결제하시겠습니까?(1: 예, 2: 아니오) : ");
+        printCouponSale();
+
+        System.out.println("\n결제하시겠습니까?(1: 예, 2: 아니오) : ");
 
         int choice = inputCheck.getValidChoiceInRange(2,1);
         if(choice == 1) {
@@ -25,13 +34,35 @@ public class Payment {
         return isPositive;
     }
 
+    public void printCouponSale() {
+        if (timer.isAlive())
+            System.out.println("(추가 할인될 가격 : " + coupon.getSalePrice() +"원)");
+    }
+
+    public int calculateCouponAppliedPrice(){
+        int payingPrice = cart.getTotalPrice();
+
+        if (timer.isAlive()) {
+            if (payingPrice > coupon.getSalePrice()) {
+                payingPrice -= coupon.getSalePrice();
+            } else {
+                payingPrice = 0;
+            }
+        }
+        return payingPrice;
+    }
+
     public void pay() {
         boolean payAbility = false;
         boolean opinion = askForPayment();
 
         while(opinion) {
-            if (user.getCardBalance() >= cart.getTotalPrice()) {
+            int payingPrice = calculateCouponAppliedPrice();
+            cart.updateTotalPrice(payingPrice);
+
+            if (user.getCardBalance() >= payingPrice) {
                 user.updateCardBalance(user.getCardBalance() - cart.getTotalPrice());
+                timer.stopThread();
                 payAbility = true;
             }
             showPayResult(payAbility);
@@ -45,8 +76,8 @@ public class Payment {
     public void showPayResult(boolean result) {
         if (result) {
             System.out.println("\n결제가 완료되었습니다.");
-            System.out.println("결제 금액은 " + cart.getTotalPrice() + "입니다.");
-            System.out.println("현재 남은 잔액은 " + user.getCardBalance() + "입니다.\n");
+            System.out.println("결제 금액은 " + cart.getTotalPrice() + "원입니다.");
+            System.out.println("현재 남은 잔액은 " + user.getCardBalance() + "원입니다.\n");
         } else {
             System.out.println("\n카드에 잔액이 부족합니다.");
         }

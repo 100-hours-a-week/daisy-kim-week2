@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Cart {
     private int totalPrice = 0;
-    private List<Menu> cartItems = new ArrayList<Menu>();
+    private List<Menu> cartItems = new ArrayList<>();
     private User user;
 
     public Cart(User user) {
@@ -24,11 +24,15 @@ public class Cart {
         return totalPrice;
     }
 
+    public void updateTotalPrice(int price) {
+        this.totalPrice = price;
+    }
+
     public void printCart() {
         System.out.println("\n[" + user.getName() + "님의 장바구니]");
         for (Menu menu : cartItems) {
             System.out.println(menu.getName());
         }
-        System.out.println("총 금액 : " + totalPrice + "\n");
+        System.out.println("총 금액 : " + totalPrice);
     }
 }
