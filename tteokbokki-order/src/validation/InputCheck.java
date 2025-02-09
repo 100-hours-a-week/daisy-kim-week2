@@ -1,7 +1,6 @@
 package validation;
 
 import util.InputScanner;
-
 import java.util.Scanner;
 
 public class InputCheck{
@@ -79,6 +78,5 @@ public class InputCheck{
         }
         return balance;
     }
-
 
 }

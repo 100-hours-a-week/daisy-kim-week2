@@ -29,7 +29,7 @@ public class Cart {
     }
 
     public void printCart() {
-        System.out.println("\n[" + user.getName() + "님의 장바구니]");
+        System.out.println("[" + user.getName() + "님의 장바구니]");
         for (Menu menu : cartItems) {
             System.out.println(menu.getName());
         }

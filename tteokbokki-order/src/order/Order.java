@@ -1,5 +1,6 @@
 package order;
 
+import design.LinePrint;
 import menu.Menu;
 import user.User;
 import validation.InputCheck;
@@ -90,11 +91,14 @@ public class Order {
     }
 
     public void showMenus() {
-        System.out.println("\n주문할 메뉴를 선택해 주세요.\n[떡볶이]");
+        LinePrint.printTopLine();
+        System.out.println("[메 뉴 판]\n");
+        System.out.println("[떡볶이]");
         showList(tteokbokkiFactory, 1, tteokbokkiCount);
 
         System.out.println("[사이드]");
         showList(sideMenuFactory, tteokbokkiCount+1, menuCount);
+        LinePrint.printBottomLine();
     }
 
     public void showToppings() {
