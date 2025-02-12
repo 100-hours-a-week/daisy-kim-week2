@@ -1,9 +1,9 @@
 package coupon;
 
 public class Dollar5 extends Coupon {
-    private static final int time = 20;
-    private static final int salePrice = 5000;
+    private static final int TIME = 20;
+    private static final int SALE_PRICE = 5000;
     public Dollar5() {
-        super(time, salePrice);
+        super(TIME, SALE_PRICE);
     }
 }
