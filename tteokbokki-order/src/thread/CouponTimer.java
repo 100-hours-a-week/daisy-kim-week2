@@ -3,27 +3,27 @@ package thread;
 import coupon.Coupon;
 import design.LinePrint;
 
-public class Timer extends Thread {
+public class CouponTimer extends Thread {
     private Coupon coupon;
-    private static Timer timer;
+    private static CouponTimer couponTimer;
     public boolean shouldWait = false;
 
-    private Timer(Coupon coupon) {
+    private CouponTimer(Coupon coupon) {
         this.coupon = coupon;
     }
-    private Timer() {}
+    private CouponTimer() {}
 
-    public static Timer getInstance(Coupon coupon) {
-        if (timer == null) {
-            timer = new Timer(coupon);
+    public static CouponTimer getInstance(Coupon coupon) {
+        if (couponTimer == null) {
+            couponTimer = new CouponTimer(coupon);
         }
-        return timer;
+        return couponTimer;
     }
-    public static Timer getInstance() {
-        if (timer == null) {
-            timer = new Timer();
+    public static CouponTimer getInstance() {
+        if (couponTimer == null) {
+            couponTimer = new CouponTimer();
         }
-        return timer;
+        return couponTimer;
     }
 
     public Coupon getCoupon() {
@@ -31,7 +31,7 @@ public class Timer extends Thread {
     }
 
     public void stopThread() {
-        if (timer != null)
+        if (couponTimer != null)
             super.interrupt();
     }
 
@@ -42,7 +42,7 @@ public class Timer extends Thread {
         while(timeLeft > 0) {
             if (shouldWait) {
                 try {
-                    timer.wait();
+                    couponTimer.wait();
                 } catch (InterruptedException e) {
                     if (!coupon.getIsSold())
                         System.out.println("쿠폰 타이머 활성화");

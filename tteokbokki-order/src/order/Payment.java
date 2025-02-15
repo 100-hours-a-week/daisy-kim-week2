@@ -2,7 +2,7 @@ package order;
 
 import coupon.Coupon;
 import design.LinePrint;
-import thread.Timer;
+import thread.CouponTimer;
 import user.User;
 import validation.InputCheck;
 
@@ -11,8 +11,8 @@ public class Payment {
     private final Cart cart;
     InputCheck inputCheck = new InputCheck();
 
-    private Timer timer = Timer.getInstance();
-    private Coupon coupon = timer == null ? null : timer.getCoupon();
+    private CouponTimer couponTimer = CouponTimer.getInstance();
+    private Coupon coupon = couponTimer == null ? null : couponTimer.getCoupon();
 
     public Payment(User user, Cart cart) {
         this.user = user;
@@ -27,11 +27,11 @@ public class Payment {
         printCouponSale();
         LinePrint.printBottomLine();
 
-        timer.shouldWait = true;
+        couponTimer.shouldWait = true;
         System.out.println("결제하시겠습니까?(1: 예, 2: 아니오) : ");
         int choice = inputCheck.getValidChoiceInRange(2,1);
-        coupon.setIsSold(true);
-        timer.shouldWait = false;
+        if (coupon != null) coupon.setIsSold(true);
+        couponTimer.shouldWait = false;
 
         if(choice == 1) {
             isPositive = true;
@@ -40,14 +40,14 @@ public class Payment {
     }
 
     public void printCouponSale() {
-        if (timer != null && timer.isAlive())
-            System.out.println("(추가 할인될 가격 : " + coupon.getSalePrice() +"원)");
+        if (couponTimer != null && couponTimer.isAlive())
+            System.out.println("(추가 할인될 가격 : " + coupon.getSalePrice() + "원)");
     }
 
     public int calculateCouponAppliedPrice(){
         int payingPrice = cart.getTotalPrice();
 
-        if (timer != null && timer.isAlive()) {
+        if (couponTimer != null && couponTimer.isAlive()) {
             if (payingPrice > coupon.getSalePrice()) {
                 payingPrice -= coupon.getSalePrice();
             } else {
@@ -57,7 +57,7 @@ public class Payment {
         return payingPrice;
     }
 
-    public void pay() {
+    public void processPayment() {
         boolean payAbility = false;
         boolean opinion = askForPayment();
 
@@ -67,7 +67,7 @@ public class Payment {
 
             if (user.getCardBalance() >= payingPrice) {
                 user.updateCardBalance(user.getCardBalance() - cart.getTotalPrice());
-                timer.stopThread();
+                couponTimer.stopThread();
                 payAbility = true;
             }
             showPayResult(payAbility);

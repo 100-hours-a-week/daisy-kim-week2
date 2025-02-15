@@ -8,7 +8,6 @@ import validation.InputCheck;
 public class Order {
     private final User user;
     private int price = 0;
-    private String name = "";
 
     private static final Factory tteokbokkiFactory = new TteokbokkiFactory();
     private static final Factory sideMenuFactory = new SideMenuFactory();
@@ -19,13 +18,14 @@ public class Order {
     private int toppingCnt = toppingFactory.getTotalNumber();
 
     private final InputCheck inputCheck = new InputCheck();
+    private final StringBuilder menuNameStringBuilder = new StringBuilder();
 
     public Order(User user) {
         this.user = user;
     }
 
     //주문 로직(반복 회로)
-    public Cart order() {
+    public Cart processOrder() {
         Cart cart = new Cart(user);
 
         while(true) {
@@ -37,7 +37,7 @@ public class Order {
             if(choice == 2) {
                 continue;
             }
-            cart.addMenu(new Menu(name, price));
+            cart.addMenu(new Menu(menuNameStringBuilder.toString(), price));
 
             System.out.print("더 주문하시겠습니까? (1: 예, 2: 아니오) : ");
             choice = inputCheck.getValidChoiceInRange(2, 1);
@@ -46,7 +46,7 @@ public class Order {
             }
 
             price = 0;
-            name = "";
+            menuNameStringBuilder.setLength(0);
         }
         return cart;
     }
@@ -63,13 +63,16 @@ public class Order {
         if (choice <= tteokbokkiCount) {
             Menu tteokbokki = tteokbokkiFactory.getMenuName(choice);
             String spicyLevelName = tteokbokki.selectSpicyLevel();
-            name = tteokbokki.getName() + " " + spicyLevelName;
+
+            menuNameStringBuilder.append(tteokbokki.getName());
+            menuNameStringBuilder.append(" ");
+            menuNameStringBuilder.append(spicyLevelName);
             price = tteokbokki.getPrice();
 
             selectTopping();
         } else {
             Menu menu = sideMenuFactory.getMenuName(choice);
-            name = menu.getName();
+            menuNameStringBuilder.append(menu.getName());
             price = menu.getPrice();
         }
     }
@@ -85,7 +88,8 @@ public class Order {
             if (toppingChoice == 0) break;
 
             Menu topping = toppingFactory.getMenuName(toppingChoice);
-            name += " " + topping.getName();
+            menuNameStringBuilder.append(" ");
+            menuNameStringBuilder.append(topping.getName());
             price += topping.getPrice();
         }
     }
