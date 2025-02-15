@@ -1,7 +1,7 @@
 package coupon;
 
 import design.LinePrint;
-import thread.Timer;
+import thread.CouponTimer;
 import user.User;
 import validation.InputCheck;
 
@@ -51,8 +51,8 @@ public class CouponManager {
         drawCoupon();
         System.out.println(user.getName() + "님, 지금부터 " + coupon.getTime() + "초 안에 주문하신다면 " + coupon.getSalePrice() + "원의 할인을 받을 수 있습니다!!");
 
-        Timer timer = Timer.getInstance(coupon);
-        timer.start();
+        CouponTimer couponTimer = CouponTimer.getInstance(coupon);
+        couponTimer.start();
     }
 
 }
